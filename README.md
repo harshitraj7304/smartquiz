@@ -127,7 +127,7 @@ This project focuses on AI integration, modern UI/UX, analytics visualization, a
 
 ## 🔐 Login Page
 
-![Login](<./screenshots/login(2).png>)
+![Login](<./screenshots/login.png>)
 
 ---
 
