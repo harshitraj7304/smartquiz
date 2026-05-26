@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 
-const mongoDbUri = `mongodb+srv://admin2:admin2@cluster0.ckhcvux.mongodb.net/quiz_app?retryWrites=true&w=majority&appName=Cluster0`;
+const mongoDbUri = process.env.MONGODB_URI || process.env.MONGO_URI || `mongodb+srv://admin2:admin2@cluster0.ckhcvux.mongodb.net/quiz_app?retryWrites=true&w=majority&appName=Cluster0`;
 
 //definition
 

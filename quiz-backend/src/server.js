@@ -1,3 +1,6 @@
+import dotenv from "dotenv";
+dotenv.config();
+
 import express from "express";
 import userRouter from "./routes/users.route.js";
 import quizRouter from "./routes/quiz.route.js";
@@ -12,7 +15,7 @@ const server = express();
 
 server.use(
   cors({
-    origin: "http://localhost:5173",
+    origin: process.env.FRONTEND_URL || "http://localhost:5173",
   })
 );
 server.use(express.json());
@@ -28,6 +31,7 @@ server.use("/api", quizRouter);
 server.use("/api", quesRouter);
 server.use("/api", feedbackRouter);
 
-server.listen(8181, () => {
-  console.log(`server started on port ${8181}`);
+const PORT = process.env.PORT || 8181;
+server.listen(PORT, () => {
+  console.log(`server started on port ${PORT}`);
 });
