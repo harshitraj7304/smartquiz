@@ -84,7 +84,15 @@ export const getStats = async (req, resp) => {
 
 // create quiz from AI
 export const createQuizFromAI = async (req, resp) => {
-  const { title, numberOfQuestions, description } = req.body;
-  const response = await generateQuizFromAI(title, description, numberOfQuestions, req.userId);
-  return resp.json(response);
+  try {
+    const { title, numberOfQuestions, description } = req.body;
+    const response = await generateQuizFromAI(title, description, numberOfQuestions, req.userId);
+    return resp.json(response);
+  } catch (error) {
+    console.error("Error in createQuizFromAI controller:", error);
+    return resp.status(500).json({
+      message: "Failed to generate quiz from AI",
+      error: error.message || "An unexpected error occurred",
+    });
+  }
 };

@@ -71,28 +71,42 @@ export const generateQuizFromAI = async (
   Return only the valid JSON object.
   `;
 
-  // call ai to generate quizz
-  const response = await openAiClient.responses.create({
-    model: "gpt-5-mini",
-    input: generateQuizPrompt,
-  });
+  if (!process.env.OPENAI_API_KEY) {
+    throw new Error("OpenAI API key is missing. Please set the OPENAI_API_KEY in your .env file (for local development) or on Render/Vercel (for production).");
+  }
 
-  console.log(response);
-  const quizFromAI = JSON.parse(response.output_text);
+  try {
+    // call ai to generate quiz
+    const response = await openAiClient.chat.completions.create({
+      model: "gpt-4o-mini",
+      messages: [
+        {
+          role: "user",
+          content: generateQuizPrompt,
+        },
+      ],
+      response_format: { type: "json_object" },
+    });
 
-  const allSavedQuestiosn = await Question.insertMany(quizFromAI.questions);
-  const questionsIds = allSavedQuestiosn.map((q) => q._id);
+    console.log("OpenAI Response:", response);
+    const content = response.choices[0].message.content;
+    const quizFromAI = JSON.parse(content);
 
-  const quizToSave = { ...quizFromAI, questions: questionsIds, createdBy: userId, isAiGenerated: true };
-  //database mein save....
-  const createdQuiz = await Quiz.create(quizToSave);
+    const allSavedQuestiosn = await Question.insertMany(quizFromAI.questions);
+    const questionsIds = allSavedQuestiosn.map((q) => q._id);
 
-  return quizFromAI.questions.map((question) => {
-    question.correctAnswer = "";
-    return question;
-  });
+    const quizToSave = { ...quizFromAI, questions: questionsIds, createdBy: userId, isAiGenerated: true };
+    //database mein save....
+    const createdQuiz = await Quiz.create(quizToSave);
 
-  // return quizFromAI;
+    return quizFromAI.questions.map((question) => {
+      question.correctAnswer = "";
+      return question;
+    });
+  } catch (error) {
+    console.error("AI Generation Error:", error);
+    throw error;
+  }
 };
 
 export const analyzeResult = async (result) => {
