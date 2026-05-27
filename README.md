@@ -219,7 +219,7 @@ I enjoy building real-world MERN stack projects and continuously improving my de
 
 📧 Email: harshitraj7304845705@gmail.com
 
-🔗 LinkedIn: https://www.linkedin.com/in/harshit-raj-7304/
+🔗 LinkedIn: https://linkedin.com/in/harshit-raj-35a657229
 
 💻 GitHub: https://github.com/harshitraj7304
 
